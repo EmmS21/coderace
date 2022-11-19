@@ -3,7 +3,10 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
+import 'brace/theme/monokai';
 import NavBar from "./NavBar";
+import Footer from "./Footer";
+
 
 const Editor = () => {
     const [selectedLanguage, setSelectedLanguage] = useState("");
@@ -25,6 +28,7 @@ const Editor = () => {
             enableLiveAutocompletion={true}
             width={900}
         />
+        <Footer />
         </>
     )
 }
