@@ -20,7 +20,7 @@ const Editor = () => {
     }
     return (
         <>
-        <NavBar/>
+        <NavBar setSelectedLanguage={setSelectedLanguage}/>
         <WelcomeModal />
         <AceEditor
             mode={selectedLanguage}

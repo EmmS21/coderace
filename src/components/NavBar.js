@@ -11,8 +11,12 @@ import Grid from "@mui/material/Grid";
 import Drawer  from "@mui/material/Drawer";
 import { styled, useTheme } from "@mui/material/styles"
 import CssBaseline from '@mui/material/CssBaseline';
+import { DownOutlined } from '@ant-design/icons';
+import { Dropdown, Space, Typography as Typo } from 'antd';
+import { Javascript } from "@mui/icons-material";
 
-const NavBar = () => {
+
+const NavBar = ({ setSelectedLanguage }) => {
     const [open, setOpen] = useState(false);
     const theme = useTheme();
 
@@ -20,7 +24,6 @@ const NavBar = () => {
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
       }));
@@ -32,6 +35,21 @@ const NavBar = () => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const languageMap = [
+        {
+            key: '70',
+            label: "Python",
+        },
+        {
+            key: '63',
+            label: "JavaScript",
+        },
+        {
+            key: '62',
+            label: "Java",
+        },
+    ];
 
     return(
         <Box sx={{ flexGrow: 1 }}>
@@ -52,10 +70,10 @@ const NavBar = () => {
                             </Toolbar>
                     <Drawer
                         sx={{
-                        width: 50,
+                        width:200,
                         flexShrink: 0,
                         '& .MuiDrawer-paper': {
-                            width: 50,
+                            width: 200,
                             boxSizing: 'border-box',
                         },
                         }}
@@ -69,6 +87,21 @@ const NavBar = () => {
                     </DrawerHeader>
                         Place holder
                     </Drawer>
+                    </Grid>
+                    <Grid item xs>
+                        <Dropdown
+                            menu={{
+                                languageMap,
+                                seletable: true,
+                                defaultSelectedKeys: ['70'],
+                            }}
+                        >
+                            <Typo.Link>
+                                <Space>
+                                    Select Language
+                                </Space>
+                            </Typo.Link>
+                        </Dropdown>
                     </Grid>
                     <Grid item xs>
                         <Typography variant="h6" component="div" sx={{ margin: "ml" }}>
