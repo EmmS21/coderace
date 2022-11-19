@@ -6,6 +6,7 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import 'brace/theme/monokai';
 import NavBar from "./NavBar";
 import Footer from "./Footer";
+import WelcomeModal from "./WelcomeModal"
 
 
 const Editor = () => {
@@ -20,6 +21,7 @@ const Editor = () => {
     return (
         <>
         <NavBar/>
+        <WelcomeModal />
         <AceEditor
             mode={selectedLanguage}
             theme="monokai"
