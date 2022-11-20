@@ -13,7 +13,7 @@ import { styled } from "@mui/material/styles"
 import InputLabel from '@mui/material/InputLabel';
 
 
-const NavBar = ({ selectedLanguage }) => {
+const NavBar = ({ selectedLanguage, setCurrLang }) => {
     const [open, setOpen] = useState(false);
 
     const DrawerHeader = styled('div')(({ theme }) => ({
@@ -31,6 +31,17 @@ const NavBar = ({ selectedLanguage }) => {
     const handleDrawerClose = () => {
         setOpen(false);
     }; 
+
+    const languageMap = {
+        70: "python",
+        63: "javascript",
+        62: "java"
+    }
+
+    const changeLanguageHandler = (e) => {
+        selectedLanguage.current = e.target.value
+        setCurrLang(languageMap[selectedLanguage.current])
+    }
 
     return(
         <Box sx={{ flexGrow: 1 }}>
@@ -75,9 +86,10 @@ const NavBar = ({ selectedLanguage }) => {
                         </InputLabel>
                         <select
                             aria-label="Default select example"
-                            onChange={ (e) => selectedLanguage.current = e.target.value }
-                        >
-                            <option value="63" selected>Javascript</option>
+                            onChange={changeLanguageHandler}
+                        >   
+                            <option selected>Select Language</option>
+                            <option value="63">Javascript</option>
                             <option value="70">Python</option>
                             <option value="62">Java</option>
                         </select>

@@ -18,7 +18,7 @@ const style = {
   p: 4,
 };
 
-export default function WelcomeModal() {
+export default function WelcomeModal({getEasyQuestion}) {
   const [open, setOpen] = React.useState(true);
   const handleClose = () => setOpen(false);
 
@@ -39,7 +39,7 @@ export default function WelcomeModal() {
             </Typography>
             <Grid container spacing={4}>
                 <Grid item xs>
-                    <Button>Easy</Button>
+                    <Button onClick={getEasyQuestion}>Easy</Button>
                 </Grid>
                 <Grid item xs>
                     <Button>Medium</Button>

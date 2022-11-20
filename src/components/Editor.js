@@ -8,12 +8,16 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 import WelcomeModal from "./WelcomeModal"
 import axios from "axios";
+import { ScreenLockLandscapeRounded } from "@mui/icons-material";
 
 
 const Editor = () => {
     const selectedLanguage = useRef(0)
     const output = null;
     const baseURL = "https://judge0-ce.p.rapidapi.com/submissions"
+    const [resp, setResp] = useState("")
+    const [currLang, setCurrLang] = useState('')
+
 
     let requestBody = {
         "source_code": "",
@@ -33,42 +37,65 @@ const Editor = () => {
         "enable_network": null
     }
 
-    // X-RapidAPI-Key = "b7d6b6780dmshe567233982bd7a4p1096c8jsn53ce4a3b5bec"
+    const headers = {
+        // "X-RapidAPI-Key": "b7d6b6780dmshe567233982bd7a4p1096c8jsn53ce4a3b5bec"
+        'X-RapidAPI-Key': 'bcc33499f9msh5f6c898ed17eea7p121b52jsn76ceee08eab4'
+    }
 
-    // function sendCode(requestBody){
-    //     axios.post(`${baseURL}`, requestBody, {
-    //         headers
-    //         })
-    //         .then((res)=> {
-    //             threeSecondWait().then(()=>{
-    //                 axios.get(`${baseURL}/${res.data.token}`, {
-    //                     headers
-    //                 })
-    //                 .then((res)=> {
-    //                     setSpinnerOn(false)
-    //                     !res.data.stdout ? setResp(res.data.stderr)
-    //                         : setResp(res.data.stdout)
-    //                 })
-    //                 .catch((err)=> {
-    //                     console.log('err',err)
-    //                 })
-    //             })
-    //         })
-    // }
+    const awaitToken = async () => {
+        return await new Promise(resolve => resolve("result"));
+    };
+
+    function sendCode(requestBody){
+        axios.post(`${baseURL}`, requestBody, {
+            headers
+            })
+            .then((res)=> {
+                awaitToken().then(()=>{
+                    axios.get(`${baseURL}/${res.data.token}`, {
+                        headers
+                    })
+                    .then((res)=> {
+                        // setSpinnerOn(false)
+                        !res.data.stdout ? setResp(res.data.stderr)
+                            : setResp(res.data.stdout)
+                    })
+                    .catch((err)=> {
+                        console.log('err',err)
+                    })
+                })
+            })
+    }
+
+    function getEasyQuestion(){
+        const url = "https://codesquad.onrender.com/programming_challenge/get_easy"
+        axios.get(url).then((res)=>{
+            console.log(res.data)
+        })
+    }
+
+    function runCode(e){
+        e.preventDefault();
+        requestBody.source_code = document.getElementsByClassName('ace_content')[0].innerText
+        requestBody.language_id = selectedLanguage.current
+        console.log('what are we sending', requestBody)
+        setResp('')
+        sendCode(requestBody)
+    }
 
     return (
         <>
-        <NavBar selectedLanguage={selectedLanguage}/>
-        <WelcomeModal />
+        <NavBar selectedLanguage={selectedLanguage} setCurrLang={setCurrLang}/>
+        <WelcomeModal getEasyQuestion={getEasyQuestion} />
         <AceEditor
-            mode={selectedLanguage}
+            mode={currLang}
             theme="monokai"
             name="editor"
             editorProps={{ $blockScrolling:true }}
             enableLiveAutocompletion={true}
             width={900}
         />
-        <Footer />
+        <Footer runCode={runCode}/>
         </>
     )
 }
