@@ -9,16 +9,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Clock from "./Clock";
 import Grid from "@mui/material/Grid";
 import Drawer  from "@mui/material/Drawer";
-import { styled, useTheme } from "@mui/material/styles"
-import CssBaseline from '@mui/material/CssBaseline';
-import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, Space, Typography as Typo } from 'antd';
-import { Javascript } from "@mui/icons-material";
+import { styled } from "@mui/material/styles"
+import InputLabel from '@mui/material/InputLabel';
 
 
-const NavBar = ({ setSelectedLanguage }) => {
+const NavBar = ({ selectedLanguage }) => {
     const [open, setOpen] = useState(false);
-    const theme = useTheme();
 
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -34,22 +30,7 @@ const NavBar = ({ setSelectedLanguage }) => {
     
     const handleDrawerClose = () => {
         setOpen(false);
-    };
-
-    const languageMap = [
-        {
-            key: '70',
-            label: "Python",
-        },
-        {
-            key: '63',
-            label: "JavaScript",
-        },
-        {
-            key: '62',
-            label: "Java",
-        },
-    ];
+    }; 
 
     return(
         <Box sx={{ flexGrow: 1 }}>
@@ -89,19 +70,17 @@ const NavBar = ({ setSelectedLanguage }) => {
                     </Drawer>
                     </Grid>
                     <Grid item xs>
-                        <Dropdown
-                            menu={{
-                                languageMap,
-                                seletable: true,
-                                defaultSelectedKeys: ['70'],
-                            }}
+                        <InputLabel id="demo-simple-select-label">
+                            Select Language
+                        </InputLabel>
+                        <select
+                            aria-label="Default select example"
+                            onChange={ (e) => selectedLanguage.current = e.target.value }
                         >
-                            <Typo.Link>
-                                <Space>
-                                    Select Language
-                                </Space>
-                            </Typo.Link>
-                        </Dropdown>
+                            <option value="63" selected>Javascript</option>
+                            <option value="70">Python</option>
+                            <option value="62">Java</option>
+                        </select>
                     </Grid>
                     <Grid item xs>
                         <Typography variant="h6" component="div" sx={{ margin: "ml" }}>
