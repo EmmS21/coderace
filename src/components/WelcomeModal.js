@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -19,8 +19,13 @@ const style = {
 };
 
 export default function WelcomeModal({getEasyQuestion}) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const handleClose = () => setOpen(false);
+
+  function closeAndGetQuestion () {
+    handleClose()
+    getEasyQuestion()
+  }
 
   return (
     <div>
@@ -32,19 +37,14 @@ export default function WelcomeModal({getEasyQuestion}) {
       >
         <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-                Select Difficulty
+                Ready to play?
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Select a level of difficulty and solve as many programming challenges as you can in 25 minutes.
+                Solve as many Leetcode questions as you can within 25 minutes.
             </Typography>
-            <Grid container spacing={4}>
-                <Grid item xs>
-                    <Button onClick={getEasyQuestion}>Easy</Button>
-                </Grid>
-                <Grid item xs>
-                    <Button>Medium</Button>
-                </Grid>
-            </Grid>
+            <center>
+              <Button onClick={closeAndGetQuestion}>Start</Button>
+            </center>
         </Box>
       </Modal>
     </div>

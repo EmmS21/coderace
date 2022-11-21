@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,10 +11,18 @@ import Grid from "@mui/material/Grid";
 import Drawer  from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles"
 import InputLabel from '@mui/material/InputLabel';
-
+import Context from "../context/Context"
 
 const NavBar = ({ selectedLanguage, setCurrLang }) => {
     const [open, setOpen] = useState(false);
+    const {
+        getQuestion, extractExample, getInput, 
+        received, title, example, 
+        problemStatement
+    } = useContext(Context)
+    // let title = getQuestion?.current[0].title;
+    // let example =  getQuestion?.current[0].Example2.slice(3);
+    // const problemStatement = getQuestion?.current[0].place;
 
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -42,6 +50,21 @@ const NavBar = ({ selectedLanguage, setCurrLang }) => {
         selectedLanguage.current = e.target.value
         setCurrLang(languageMap[selectedLanguage.current])
     }
+
+    // function extractExample(challenge) {
+    //     const constraintsIdx = challenge.indexOf("Constraints")
+    //     const cleanExample = challenge.slice(0,constraintsIdx)
+    //     const exampleArr = cleanExample.slice(3).split(/\S+(?=: )/g) 
+    //     exampleArr.shift()
+    //     return exampleArr[0]
+    // }
+
+    // function getInput(exampleInput){
+    //     const input = exampleInput.match(/= (.+)/)[1]
+    //     return input
+    // }
+
+    // console.log('example', getInput(extractExample(example)))
 
     return(
         <Box sx={{ flexGrow: 1 }}>
@@ -77,7 +100,21 @@ const NavBar = ({ selectedLanguage, setCurrLang }) => {
                         <IconButton onClick={handleDrawerClose}>
                         </IconButton>
                     </DrawerHeader>
-                        Place holder
+                        <h5>
+                            Title: {title.current}
+                        </h5>
+                        <p>
+                            <strong>
+                                Question:
+                            </strong>
+                            { problemStatement.current }
+                        </p>
+                        <p>
+                            <strong>
+                                Example: 
+                            </strong>
+                            { example.current }
+                        </p>
                     </Drawer>
                     </Grid>
                     <Grid item xs>

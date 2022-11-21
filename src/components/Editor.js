@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
@@ -9,6 +9,7 @@ import Footer from "./Footer";
 import WelcomeModal from "./WelcomeModal"
 import axios from "axios";
 import { ScreenLockLandscapeRounded } from "@mui/icons-material";
+import Context from "../context/Context"
 
 
 const Editor = () => {
@@ -17,6 +18,11 @@ const Editor = () => {
     const baseURL = "https://judge0-ce.p.rapidapi.com/submissions"
     const [resp, setResp] = useState("")
     const [currLang, setCurrLang] = useState('')
+    const easyChallenge = "https://data.mongodb-api.com/app/data-pkrpq/endpoint/getEasyChallenge"
+    const {
+        getQuestion, setReceived, title, example, problemStatement
+    } = useContext(Context)
+
 
 
     let requestBody = {
@@ -56,7 +62,6 @@ const Editor = () => {
                         headers
                     })
                     .then((res)=> {
-                        // setSpinnerOn(false)
                         !res.data.stdout ? setResp(res.data.stderr)
                             : setResp(res.data.stdout)
                     })
@@ -68,9 +73,14 @@ const Editor = () => {
     }
 
     function getEasyQuestion(){
-        const url = "https://codesquad.onrender.com/programming_challenge/get_easy"
-        axios.get(url).then((res)=>{
-            console.log(res.data)
+        // axios.defaults.headers["Access-Control-Allow-Origin"] = "*"
+        axios.get("http://localhost:5000/retrieveQuestion")
+        .then((res) =>{
+            getQuestion.current = res.data.challenge
+            title.current = getQuestion.current[0].title;
+            example.current = getQuestion.current[0].Example2.slice(3)
+            problemStatement.current = getQuestion?.current[0].place
+            console.log('resp', getQuestion.current)
         })
     }
 
@@ -85,7 +95,7 @@ const Editor = () => {
 
     return (
         <>
-        <NavBar selectedLanguage={selectedLanguage} setCurrLang={setCurrLang}/>
+        <NavBar selectedLanguage={selectedLanguage} setCurrLang={setCurrLang} />
         <WelcomeModal getEasyQuestion={getEasyQuestion} />
         <AceEditor
             mode={currLang}
