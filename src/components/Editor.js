@@ -20,7 +20,9 @@ const Editor = () => {
     const [currLang, setCurrLang] = useState('')
     const easyChallenge = "https://data.mongodb-api.com/app/data-pkrpq/endpoint/getEasyChallenge"
     const {
-        getQuestion, setReceived, title, example, problemStatement
+        getQuestion, setReceived, title, 
+        example, problemStatement, getInput,
+        extractExample
     } = useContext(Context)
 
 
@@ -84,9 +86,27 @@ const Editor = () => {
         })
     }
 
+    function strToArr (str) {
+        const replaced = str.replace(/'/g, '"')
+        const result = JSON.parse(replaced)
+        return result
+    }
+
+    function runFirstTest() {
+        const inputs = getInput(extractExample(example.current))
+        const inputsArrClean = []
+        inputs.map((inp) => {
+            isFinite(inp) === true ? inputsArrClean.push(parseInt(inp))
+                : inp.includes('[') ? inputsArrClean.push(strToArr(inp))
+                    : inputsArrClean.push(inp)
+        })
+
+    }
+
     function runCode(e){
         e.preventDefault();
         requestBody.source_code = document.getElementsByClassName('ace_content')[0].innerText
+        console.log('req', requestBody.source_code)
         requestBody.language_id = selectedLanguage.current
         console.log('what are we sending', requestBody)
         setResp('')

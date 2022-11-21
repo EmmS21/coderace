@@ -22,8 +22,12 @@ export const ContextProvider = ({ children }) => {
     }
 
     function getInput(exampleInput){
-        const input = exampleInput.match(/= (.+)/)[1]
-        return input
+        const exampleArr = exampleInput.split(', ')
+        const examples = []
+        exampleArr.map((eachEx) => {
+            examples.push(eachEx.match(/= (.+)/)[1])
+        })
+        return examples
     }
 
     let contextData = {

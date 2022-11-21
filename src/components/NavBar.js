@@ -20,9 +20,6 @@ const NavBar = ({ selectedLanguage, setCurrLang }) => {
         received, title, example, 
         problemStatement
     } = useContext(Context)
-    // let title = getQuestion?.current[0].title;
-    // let example =  getQuestion?.current[0].Example2.slice(3);
-    // const problemStatement = getQuestion?.current[0].place;
 
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -50,21 +47,6 @@ const NavBar = ({ selectedLanguage, setCurrLang }) => {
         selectedLanguage.current = e.target.value
         setCurrLang(languageMap[selectedLanguage.current])
     }
-
-    // function extractExample(challenge) {
-    //     const constraintsIdx = challenge.indexOf("Constraints")
-    //     const cleanExample = challenge.slice(0,constraintsIdx)
-    //     const exampleArr = cleanExample.slice(3).split(/\S+(?=: )/g) 
-    //     exampleArr.shift()
-    //     return exampleArr[0]
-    // }
-
-    // function getInput(exampleInput){
-    //     const input = exampleInput.match(/= (.+)/)[1]
-    //     return input
-    // }
-
-    // console.log('example', getInput(extractExample(example)))
 
     return(
         <Box sx={{ flexGrow: 1 }}>
