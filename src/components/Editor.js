@@ -64,8 +64,9 @@ const Editor = () => {
                         headers
                     })
                     .then((res)=> {
-                        !res.data.stdout ? setResp(res.data.stderr)
-                            : setResp(res.data.stdout)
+                        console.log(res.data.stdout)
+                        // !res.data.stdout ? setResp(res.data.stderr)
+                        //     : setResp(res.data.stdout)
                     })
                     .catch((err)=> {
                         console.log('err',err)
@@ -91,8 +92,8 @@ const Editor = () => {
         const result = JSON.parse(replaced)
         return result
     }
-
-    function runFirstTest() {
+    //run Test
+    function getInputs() {
         const inputs = getInput(extractExample(example.current))
         const inputsArrClean = []
         inputs.map((inp) => {
@@ -100,8 +101,25 @@ const Editor = () => {
                 : inp.includes('[') ? inputsArrClean.push(strToArr(inp))
                     : inputsArrClean.push(inp)
         })
-
+        return inputsArrClean
     }
+    
+    function getFunctionArgs () {
+        const inputs = getInputs();
+        const arr = ['one','two','three','four','five','six', 'seven', 'eight', 'nine', 'ten']
+        const scope = {}
+        for(let val = 0; val < inputs.length; val++){
+            scope[arr[val]] = inputs[val]
+        }
+        return scope;
+    }
+
+    function setFunctionArgs () {
+        const scope = getFunctionArgs()
+        return `${scope}\n`        
+    }
+
+    // function runFirst
 
     function runCode(e){
         e.preventDefault();
@@ -118,6 +136,7 @@ const Editor = () => {
         <NavBar selectedLanguage={selectedLanguage} setCurrLang={setCurrLang} />
         <WelcomeModal getEasyQuestion={getEasyQuestion} />
         <AceEditor
+            defaultValue={getQuestion.current.length > 0 ? setFunctionArgs() : null}
             mode={currLang}
             theme="monokai"
             name="editor"
