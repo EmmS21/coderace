@@ -1,38 +1,57 @@
-.App {
+
+.editor-container{
+  width: 100%;
+}
+
+.editor{
+  display: flex;
+  justify-content: space-between;
+}
+.ace-editor{
+  width:80%;
+}
+
+.output-wrapper{
+  width:20%;
+  background-color: #272822;
+  color: #F8F8F2;
+  border-left: #d3b6b6 4px solid;
+  padding: .5rem 1rem;
+}
+
+.output-wrapper > h4 {
   text-align: center;
+  padding-top: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+.passed-text{
+  text-align: center;
+  font-size: 24px; 
+  vertical-align: middle;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.passed-text svg {
+  fill: green;
+  vertical-align: middle;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.failed-text{
+  border: 1px solid rgb(235, 12, 12);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-top: 5rem;
 }
-
-.App-link {
-  color: #61dafb;
+.failed {
+  font-size: 24px;
+  color: red;
+  text-shadow: 1px 1px 2px black
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+.failed-text svg {
+  fill: red;
+  vertical-align: middle;
+} 

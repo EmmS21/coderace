@@ -10,8 +10,9 @@ import WelcomeModal from "./WelcomeModal";
 import axios from "axios";
 import Context from "../context/Context";
 import RingLoader from "react-spinners/RingLoader";
+import Output from "./Output";
 
-const override: CSSProperties = {
+const override = {
     display: "block",
     margin: "0 auto",
     borderColor: "red",
@@ -85,7 +86,7 @@ const Editor = () => {
 
     function getEasyQuestion(){
         // axios.defaults.headers["Access-Control-Allow-Origin"] = "*"
-        axios.get("http://localhost:5000/retrieveQuestion")
+        axios.get("http://localhost:3000/retrieveQuestion")
         .then((res) =>{
             getQuestion.current = res.data.challenge
             title.current = getQuestion.current[0].Title;
@@ -164,17 +165,27 @@ const Editor = () => {
             <WelcomeModal getEasyQuestion={getEasyQuestion} />
             </div> :
             <>
-            <NavBar />
-            <AceEditor
-                defaultValue={setFunctionArgs(exampleOneInput.current)}
-                mode="javascript"
-                theme="monokai"
-                name="editor"
-                editorProps={{ $blockScrolling:true }}
-                enableLiveAutocompletion={true}
-                width={900}
-            />
-            <Footer runCode={runCode}/>
+                <NavBar />
+                <div className="editor-container"> 
+                    <div className="editor"> 
+                    <AceEditor
+                        defaultValue={setFunctionArgs(exampleOneInput.current)}
+                        mode="javascript"
+                        theme="monokai"
+                        name="editor"
+                        editorProps={{ $blockScrolling:true }}
+                        enableLiveAutocompletion={true}
+                        width='950'
+                        className="ace-editor"
+                        wrapEnabled={true}
+                        fontSize={13}
+
+                    />
+                    <Output/>
+
+                   </div>
+                    <Footer runCode={runCode}/>
+                </div> 
             </>
         }
         </>
