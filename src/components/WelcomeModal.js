@@ -3,8 +3,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import Grid from "@mui/material/Grid";
-
 
 const style = {
   position: 'absolute',
@@ -21,7 +19,8 @@ const style = {
 export default function WelcomeModal({getEasyQuestion}) {
   const [open, setOpen] = useState(true);
   const handleClose = () => setOpen(false);
-
+  // setLoading
+  
   function closeAndGetQuestion () {
     handleClose()
     getEasyQuestion()

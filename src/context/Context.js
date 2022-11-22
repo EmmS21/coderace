@@ -8,16 +8,22 @@ export default Context;
 export const ContextProvider = ({ children }) => {
     const getQuestion = useRef({})
     const title = useRef([])
-    const example =  useRef([]);
     const problemStatement = useRef([]);
+    const exampleOneInput = useRef([]);
+    const exampleOneOutput = useRef([]);
+    const exampleTwoInput = useRef([]);
+    const exampleTwoOutput = useRef([]);
 
     const [received, setReceived] = useState(false)
+    const [loading, setLoading] = useState(true);
+
 
     function extractExample(challenge) {
         const constraintsIdx = challenge.indexOf("Constraints")
         const cleanExample = challenge.slice(0,constraintsIdx)
         const exampleArr = cleanExample.slice(3).split(/\S+(?=: )/g) 
         exampleArr.shift()
+        console.log('example',exampleArr)
         return exampleArr[0]
     }
 
@@ -37,8 +43,13 @@ export const ContextProvider = ({ children }) => {
         setReceived:setReceived,
         received: received,
         title: title,
-        example: example,
-        problemStatement: problemStatement
+        exampleOneInput: exampleOneInput,
+        exampleOneOutput: exampleOneOutput,
+        exampleTwoInput: exampleTwoInput,
+        exampleTwoOutput: exampleTwoOutput, 
+        problemStatement: problemStatement,
+        loading: loading,
+        setLoading: setLoading,
     }
 
     return(

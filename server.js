@@ -10,7 +10,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 app.get('/retrieveQuestion', (req, res) => {
     axios({
         method: 'get',
-        url: 'https://data.mongodb-api.com/app/data-pkrpq/endpoint/getEasyChallenge',
+        url: 'https://data.mongodb-api.com/app/data-pkrpq/endpoint/getRandom',
         withCredentials: false,
         headers: {
             'api-key': '5opRhTzTbi2N2A71LeLZBAhrZEDxjUakTc1UOncQ2qGjg5CE1IvGTfLBMFFpVyL2'

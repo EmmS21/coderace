@@ -13,7 +13,7 @@ import { styled } from "@mui/material/styles"
 import InputLabel from '@mui/material/InputLabel';
 import Context from "../context/Context"
 
-const NavBar = ({ selectedLanguage, setCurrLang }) => {
+const NavBar = ({ selectedLanguage }) => {
     const [open, setOpen] = useState(false);
     const {
         getQuestion, extractExample, getInput, 
@@ -36,17 +36,6 @@ const NavBar = ({ selectedLanguage, setCurrLang }) => {
     const handleDrawerClose = () => {
         setOpen(false);
     }; 
-
-    const languageMap = {
-        70: "python",
-        63: "javascript",
-        62: "java"
-    }
-
-    const changeLanguageHandler = (e) => {
-        selectedLanguage.current = e.target.value
-        setCurrLang(languageMap[selectedLanguage.current])
-    }
 
     return(
         <Box sx={{ flexGrow: 1 }}>
@@ -78,10 +67,11 @@ const NavBar = ({ selectedLanguage, setCurrLang }) => {
                         anchor="left"
                         open={open}
                     >
-                    <DrawerHeader>
-                        <IconButton onClick={handleDrawerClose}>
-                        </IconButton>
-                    </DrawerHeader>
+                    <Button 
+                        onClick={handleDrawerClose}
+                        size="medium"
+                    >Close
+                    </Button>
                         <h5>
                             Title: {title.current}
                         </h5>
@@ -95,23 +85,8 @@ const NavBar = ({ selectedLanguage, setCurrLang }) => {
                             <strong>
                                 Example: 
                             </strong>
-                            { example.current }
-                        </p>
+=                        </p>
                     </Drawer>
-                    </Grid>
-                    <Grid item xs>
-                        <InputLabel id="demo-simple-select-label">
-                            Select Language
-                        </InputLabel>
-                        <select
-                            aria-label="Default select example"
-                            onChange={changeLanguageHandler}
-                        >   
-                            <option selected>Select Language</option>
-                            <option value="63">Javascript</option>
-                            <option value="70">Python</option>
-                            <option value="62">Java</option>
-                        </select>
                     </Grid>
                     <Grid item xs>
                         <Typography variant="h6" component="div" sx={{ margin: "ml" }}>

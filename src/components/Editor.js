@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, CSSProperties } from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
@@ -6,25 +6,28 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import 'brace/theme/monokai';
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import WelcomeModal from "./WelcomeModal"
+import WelcomeModal from "./WelcomeModal";
 import axios from "axios";
-import { ScreenLockLandscapeRounded } from "@mui/icons-material";
-import Context from "../context/Context"
+import Context from "../context/Context";
+import RingLoader from "react-spinners/RingLoader";
 
+const override: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+}
 
 const Editor = () => {
-    const selectedLanguage = useRef(0)
     const output = null;
     const baseURL = "https://judge0-ce.p.rapidapi.com/submissions"
     const [resp, setResp] = useState("")
-    const [currLang, setCurrLang] = useState('')
-    const easyChallenge = "https://data.mongodb-api.com/app/data-pkrpq/endpoint/getEasyChallenge"
     const {
         getQuestion, setReceived, title, 
-        example, problemStatement, getInput,
-        extractExample
+        problemStatement, getInput, extractExample, 
+        loading, setLoading, exampleTwoOutput,
+        exampleOneInput, exampleOneOutput, exampleTwoInput 
     } = useContext(Context)
-
+    const [color, setColor] = useState("#ffffff");
 
 
     let requestBody = {
@@ -80,10 +83,13 @@ const Editor = () => {
         axios.get("http://localhost:5000/retrieveQuestion")
         .then((res) =>{
             getQuestion.current = res.data.challenge
-            title.current = getQuestion.current[0].title;
-            example.current = getQuestion.current[0].Example2.slice(3)
-            problemStatement.current = getQuestion?.current[0].place
-            console.log('resp', getQuestion.current)
+            title.current = getQuestion.current[0].Title;
+            problemStatement.current = getQuestion?.current[0].Problem
+            exampleOneInput.current = getQuestion.current[0]["Example One Input"]
+            exampleOneOutput.current = getQuestion.current[0]["Example One Output"]
+            exampleTwoInput.current = getQuestion.current[0]["Example Two Input"]
+            exampleTwoOutput.current = getQuestion.current[0]["Example Two Output"]
+            setLoading(false)
         })
     }
 
@@ -93,31 +99,32 @@ const Editor = () => {
         return result
     }
     //run Test
-    function getInputs() {
-        const inputs = getInput(extractExample(example.current))
-        const inputsArrClean = []
-        inputs.map((inp) => {
-            isFinite(inp) === true ? inputsArrClean.push(parseInt(inp))
-                : inp.includes('[') ? inputsArrClean.push(strToArr(inp))
-                    : inputsArrClean.push(inp)
-        })
-        return inputsArrClean
-    }
+    // function getInputs() {
+    //     const inputs = getInput(extractExample(example.current))
+    //     const inputsArrClean = []
+    //     inputs.map((inp) => {
+    //         isFinite(inp) === true ? inputsArrClean.push(parseInt(inp))
+    //             : inp.includes('[') ? inputsArrClean.push(strToArr(inp))
+    //                 : inputsArrClean.push(inp)
+    //     })
+    //     return inputsArrClean
+    // }
     
-    function getFunctionArgs () {
-        const inputs = getInputs();
-        const arr = ['one','two','three','four','five','six', 'seven', 'eight', 'nine', 'ten']
-        const scope = {}
-        for(let val = 0; val < inputs.length; val++){
-            scope[arr[val]] = inputs[val]
-        }
-        return scope;
-    }
+    // function getFunctionArgs () {
+    //     const inputs = getInputs();
+    //     const arr = ['one','two','three','four','five','six', 'seven', 'eight', 'nine', 'ten']
+    //     const scope = {}
+    //     for(let val = 0; val < inputs.length; val++){
+    //         scope[arr[val]] = inputs[val]
+    //     }
+    //     return scope;
+    // }
 
-    function setFunctionArgs () {
-        const scope = getFunctionArgs()
-        return `${scope}\n`        
-    }
+    // function setFunctionArgs () {
+    //     const scope = getFunctionArgs()
+    //     console.log(`output is, ${JSON.stringify(scope)}`)
+    //     return `const args = ${JSON.stringify(scope)}\n`        
+    // }
 
     // function runFirst
 
@@ -125,7 +132,7 @@ const Editor = () => {
         e.preventDefault();
         requestBody.source_code = document.getElementsByClassName('ace_content')[0].innerText
         console.log('req', requestBody.source_code)
-        requestBody.language_id = selectedLanguage.current
+        requestBody.language_id = "63"
         console.log('what are we sending', requestBody)
         setResp('')
         sendCode(requestBody)
@@ -133,18 +140,33 @@ const Editor = () => {
 
     return (
         <>
-        <NavBar selectedLanguage={selectedLanguage} setCurrLang={setCurrLang} />
-        <WelcomeModal getEasyQuestion={getEasyQuestion} />
-        <AceEditor
-            defaultValue={getQuestion.current.length > 0 ? setFunctionArgs() : null}
-            mode={currLang}
-            theme="monokai"
-            name="editor"
-            editorProps={{ $blockScrolling:true }}
-            enableLiveAutocompletion={true}
-            width={900}
-        />
-        <Footer runCode={runCode}/>
+        {
+            loading ? 
+            <div className ="sweet-loading">
+                <RingLoader
+                    color="blue"
+                    loading={loading}
+                    cssOverride={override}
+                    size={800}
+                    aria-label="Loading Game"
+                    data-testid="loader"
+                />
+            <WelcomeModal getEasyQuestion={getEasyQuestion} />
+            </div> :
+            <>
+            <NavBar />
+            <AceEditor
+                // defaultValue={setFunctionArgs()}
+                mode="javascript"
+                theme="monokai"
+                name="editor"
+                editorProps={{ $blockScrolling:true }}
+                enableLiveAutocompletion={true}
+                width={900}
+            />
+            <Footer runCode={runCode}/>
+            </>
+        }
         </>
     )
 }
