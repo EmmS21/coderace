@@ -28,6 +28,7 @@ const Editor = () => {
         exampleOneInput, exampleOneOutput, exampleTwoInput 
     } = useContext(Context)
     const [color, setColor] = useState("#ffffff");
+    const [clickRun, setClickRun] = useState(false)
 
 
     let requestBody = {
@@ -57,6 +58,10 @@ const Editor = () => {
         return await new Promise(resolve => resolve("result"));
     };
 
+    function evaluateFirstExample(response){
+        return response === exampleOneOutput.current ? 'Pass' : `Test failed, expected ${exampleOneOutput.current}`
+    }
+
     function sendCode(requestBody){
         axios.post(`${baseURL}`, requestBody, {
             headers
@@ -67,9 +72,9 @@ const Editor = () => {
                         headers
                     })
                     .then((res)=> {
-                        console.log(res.data.stdout)
-                        // !res.data.stdout ? setResp(res.data.stderr)
-                        //     : setResp(res.data.stdout)
+                        console.log(res.data)
+                        !res.data.stdout ? setResp(res.data.stderr)
+                            : setResp(res.data.stdout)
                     })
                     .catch((err)=> {
                         console.log('err',err)
@@ -93,51 +98,56 @@ const Editor = () => {
         })
     }
 
-    function strToArr (str) {
-        const replaced = str.replace(/'/g, '"')
-        const result = JSON.parse(replaced)
-        return result
+    function splitExampleInputByComma(exampleInput){
+        return exampleInput.split(/,(?![^\(\[]*[\]\)])/);
     }
-    //run Test
-    // function getInputs() {
-    //     const inputs = getInput(extractExample(example.current))
-    //     const inputsArrClean = []
-    //     inputs.map((inp) => {
-    //         isFinite(inp) === true ? inputsArrClean.push(parseInt(inp))
-    //             : inp.includes('[') ? inputsArrClean.push(strToArr(inp))
-    //                 : inputsArrClean.push(inp)
-    //     })
-    //     return inputsArrClean
-    // }
     
-    // function getFunctionArgs () {
-    //     const inputs = getInputs();
-    //     const arr = ['one','two','three','four','five','six', 'seven', 'eight', 'nine', 'ten']
-    //     const scope = {}
-    //     for(let val = 0; val < inputs.length; val++){
-    //         scope[arr[val]] = inputs[val]
-    //     }
-    //     return scope;
-    // }
-
-    // function setFunctionArgs () {
-    //     const scope = getFunctionArgs()
-    //     console.log(`output is, ${JSON.stringify(scope)}`)
-    //     return `const args = ${JSON.stringify(scope)}\n`        
-    // }
-
-    // function runFirst
+    function inputArgs(exampleInput){
+        const splitByCommaArr = splitExampleInputByComma(exampleInput)
+        const resultArr = [];
+        for(const elem of splitByCommaArr){
+            resultArr.push(elem.match(/(=).*/)[0].replace("=","").replaceAll(" ", ""))
+        }
+        return resultArr
+    }
+    
+    function varNames(exampleInput){
+        const splitByCommaArr = splitExampleInputByComma(exampleInput)
+        const resultArr = []
+        for(const elem of splitByCommaArr){
+            resultArr.push(elem.match(/[^=]*/)[0].replaceAll(" ",""))
+        }
+        return resultArr
+    }
+    
+    function setFunctionArgs(exampleInput){
+        const varArr = varNames(exampleInput)
+        const inputArr = inputArgs(exampleInput)
+        const scope = {}
+        for (let i = 0; i < varArr.length; i++) {
+            scope[varArr[i]] = inputArr[i]
+        }
+        return `const args = ${JSON.stringify(scope)}\n`
+    }
 
     function runCode(e){
         e.preventDefault();
         requestBody.source_code = document.getElementsByClassName('ace_content')[0].innerText
         console.log('req', requestBody.source_code)
         requestBody.language_id = "63"
+        requestBody.expected_output = exampleOneOutput.current
         console.log('what are we sending', requestBody)
         setResp('')
         sendCode(requestBody)
+        setClickRun(true)        
     }
 
+    useState(() => {
+        if(clickRun === true){
+            console.log('eval',setResp(evaluateFirstExample(resp)))
+        }
+    },[resp, clickRun])
+    
     return (
         <>
         {
@@ -156,7 +166,7 @@ const Editor = () => {
             <>
             <NavBar />
             <AceEditor
-                // defaultValue={setFunctionArgs()}
+                defaultValue={setFunctionArgs(exampleOneInput.current)}
                 mode="javascript"
                 theme="monokai"
                 name="editor"

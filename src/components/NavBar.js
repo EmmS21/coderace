@@ -17,8 +17,8 @@ const NavBar = ({ selectedLanguage }) => {
     const [open, setOpen] = useState(false);
     const {
         getQuestion, extractExample, getInput, 
-        received, title, example, 
-        problemStatement
+        received, title, problemStatement,
+        exampleOneInput, exampleOneOutput
     } = useContext(Context)
 
     const DrawerHeader = styled('div')(({ theme }) => ({
@@ -85,7 +85,11 @@ const NavBar = ({ selectedLanguage }) => {
                             <strong>
                                 Example: 
                             </strong>
-=                        </p>
+                            <br></br>
+                            Input: <strong>{ exampleOneInput.current }</strong>
+                            <br></br>
+                            Output: <strong>{ exampleOneOutput.current }</strong> 
+                        </p>
                     </Drawer>
                     </Grid>
                     <Grid item xs>
