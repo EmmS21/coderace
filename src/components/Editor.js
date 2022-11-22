@@ -19,16 +19,18 @@ const override: CSSProperties = {
 
 const Editor = () => {
     const output = null;
-    const baseURL = "https://judge0-ce.p.rapidapi.com/submissions"
-    const [resp, setResp] = useState("")
+    const baseURL = "https://judge0-ce.p.rapidapi.com/submissions";
+    // const [resp, setResp] = useState("");
     const {
         getQuestion, setReceived, title, 
         problemStatement, getInput, extractExample, 
         loading, setLoading, exampleTwoOutput,
         exampleOneInput, exampleOneOutput, exampleTwoInput 
-    } = useContext(Context)
+    } = useContext(Context);
     const [color, setColor] = useState("#ffffff");
-    const [clickRun, setClickRun] = useState(false)
+    const [clickRun, setClickRun] = useState(false);
+    const expectedOutput = useRef([])
+    const resp = useRef([])
 
 
     let requestBody = {
@@ -62,6 +64,13 @@ const Editor = () => {
         return response === exampleOneOutput.current ? 'Pass' : `Test failed, expected ${exampleOneOutput.current}`
     }
 
+    function updateState(res){
+        resp.current = res.data.stdout
+        console.log('output', resp)
+        expectedOutput.current = res.data.status.description
+        console.log('expected', expectedOutput.current)
+    }
+
     function sendCode(requestBody){
         axios.post(`${baseURL}`, requestBody, {
             headers
@@ -73,8 +82,8 @@ const Editor = () => {
                     })
                     .then((res)=> {
                         console.log(res.data)
-                        !res.data.stdout ? setResp(res.data.stderr)
-                            : setResp(res.data.stdout)
+                        !res.data.stdout ? resp.current = res.data.stderr
+                            : updateState(res)
                     })
                     .catch((err)=> {
                         console.log('err',err)
@@ -137,16 +146,10 @@ const Editor = () => {
         requestBody.language_id = "63"
         requestBody.expected_output = exampleOneOutput.current
         console.log('what are we sending', requestBody)
-        setResp('')
+        resp.current = ''
         sendCode(requestBody)
         setClickRun(true)        
     }
-
-    useState(() => {
-        if(clickRun === true){
-            console.log('eval',setResp(evaluateFirstExample(resp)))
-        }
-    },[resp, clickRun])
     
     return (
         <>
