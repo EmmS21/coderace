@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors')
 const axios = require('axios');
-const port = process.env.PORT || 5000 ||  3000;
+const port = process.env.PORT || 3000;
 
 app.use(cors())
 app.listen(port, () => console.log(`Listening on port ${port}`));
