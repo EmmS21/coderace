@@ -136,8 +136,25 @@ const Editor = () => {
         for (let i = 0; i < varArr.length; i++) {
             scope[varArr[i]] = inputArr[i]
         }
-        return `const args = ${JSON.stringify(scope)}\n`
+        return `//Do not delete. You will need to use the object keys to access their values as your function arguments\n//You may have to convert some object values to strings, integers or arrays.\n//Have a look at the example in the question and check the type of the expected output \n const args = ${JSON.stringify(scope).replaceAll('\n','').replace(/\\/g, '')}
+        \nfunction test (){\n//enter your code here \n\n\n}
+        \n//pass your arguments here \nconsole.log(test())`
     }
+
+    // function setInitialExample(exampleInput){
+        
+    // }
+    function runSubmit(e){
+        e.preventDefault();
+        let isCorrect = true
+        let numRuns = 0
+        const exampleInputs = [exampleOneInput, exampleTwoInput]
+        while(isCorrect && numRuns < 2){
+
+        }
+
+    }
+
 
     function runCode(e){
         e.preventDefault();
