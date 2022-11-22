@@ -20,16 +20,18 @@ const override = {
 
 const Editor = () => {
     const output = null;
-    const baseURL = "https://judge0-ce.p.rapidapi.com/submissions"
-    const [resp, setResp] = useState("")
+    const baseURL = "https://judge0-ce.p.rapidapi.com/submissions";
+    // const [resp, setResp] = useState("");
     const {
         getQuestion, setReceived, title, 
         problemStatement, getInput, extractExample, 
         loading, setLoading, exampleTwoOutput,
         exampleOneInput, exampleOneOutput, exampleTwoInput 
-    } = useContext(Context)
+    } = useContext(Context);
     const [color, setColor] = useState("#ffffff");
-    const [clickRun, setClickRun] = useState(false)
+    const [clickRun, setClickRun] = useState(false);
+    const expectedOutput = useRef([])
+    const resp = useRef([])
 
 
     let requestBody = {
@@ -63,6 +65,13 @@ const Editor = () => {
         return response === exampleOneOutput.current ? 'Pass' : `Test failed, expected ${exampleOneOutput.current}`
     }
 
+    function updateState(res){
+        resp.current = res.data.stdout
+        console.log('output', resp)
+        expectedOutput.current = res.data.status.description
+        console.log('expected', expectedOutput.current)
+    }
+
     function sendCode(requestBody){
         axios.post(`${baseURL}`, requestBody, {
             headers
@@ -74,8 +83,8 @@ const Editor = () => {
                     })
                     .then((res)=> {
                         console.log(res.data)
-                        !res.data.stdout ? setResp(res.data.stderr)
-                            : setResp(res.data.stdout)
+                        !res.data.stdout ? resp.current = res.data.stderr
+                            : updateState(res)
                     })
                     .catch((err)=> {
                         console.log('err',err)
@@ -128,8 +137,25 @@ const Editor = () => {
         for (let i = 0; i < varArr.length; i++) {
             scope[varArr[i]] = inputArr[i]
         }
-        return `const args = ${JSON.stringify(scope)}\n`
+        return `//Do not delete. You will need to use the object keys to access their values as your function arguments\n//You may have to convert some object values to strings, integers or arrays.\n//Have a look at the example in the question and check the type of the expected output \n const args = ${JSON.stringify(scope).replaceAll('\n','').replace(/\\/g, '')}
+        \nfunction test (){\n//enter your code here \n\n\n}
+        \n//pass your arguments here \nconsole.log(test())`
     }
+
+    // function setInitialExample(exampleInput){
+        
+    // }
+    function runSubmit(e){
+        e.preventDefault();
+        let isCorrect = true
+        let numRuns = 0
+        const exampleInputs = [exampleOneInput, exampleTwoInput]
+        while(isCorrect && numRuns < 2){
+
+        }
+
+    }
+
 
     function runCode(e){
         e.preventDefault();
@@ -138,16 +164,10 @@ const Editor = () => {
         requestBody.language_id = "63"
         requestBody.expected_output = exampleOneOutput.current
         console.log('what are we sending', requestBody)
-        setResp('')
+        resp.current = ''
         sendCode(requestBody)
         setClickRun(true)        
     }
-
-    useState(() => {
-        if(clickRun === true){
-            console.log('eval',setResp(evaluateFirstExample(resp)))
-        }
-    },[resp, clickRun])
     
     return (
         <>
