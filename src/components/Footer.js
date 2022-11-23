@@ -5,14 +5,16 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import CheckIcon from '@mui/icons-material/Check';
 
-const Footer = ({runCode}) => {
+const Footer = ({runCode, runSubmit, disableRun, passedTest}) => {
     return (
         <Box sx={{ width: 800 }}>
         <BottomNavigation
           showLabels
         >
-          <BottomNavigationAction onClick={runCode} label="Run" icon={<PlayArrowIcon/>} />
-          <BottomNavigationAction label="Submit" icon={<CheckIcon/>} />
+          { disableRun && passedTest < 1?
+              <BottomNavigationAction onClick={runSubmit} label="Submit" icon={<CheckIcon/>} /> :
+            <BottomNavigationAction onClick={runCode} label="Run" icon={<PlayArrowIcon/>} /> 
+          }
         </BottomNavigation>
       </Box>
     );
