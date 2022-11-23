@@ -10,6 +10,7 @@ import WelcomeModal from "./WelcomeModal";
 import axios from "axios";
 import Context from "../context/Context";
 import RingLoader from "react-spinners/RingLoader";
+import Output from "./Output";
 import { fireEvent } from "@testing-library/react";
 import { NumbersRounded, NumbersSharp } from "@mui/icons-material";
 
@@ -240,17 +241,27 @@ const Editor = () => {
             <WelcomeModal getEasyQuestion={getEasyQuestion} />
             </div> :
             <>
-            <NavBar setIsComplete={setIsComplete} />
-            <AceEditor
-                defaultValue={setFunctionArgs(exampleOneInput.current)}
-                mode="javascript"
-                theme="monokai"
-                name="editor"
-                editorProps={{ $blockScrolling:true }}
-                enableLiveAutocompletion={true}
-                width={900}
-            />
-            <Footer runCode={runCode} disableRun={setClickRun} runSubmit={runSubmit} passedTest={passedTest}/>
+                <NavBar />
+                <div className="editor-container"> 
+                    <div className="editor"> 
+                    <AceEditor
+                        defaultValue={setFunctionArgs(exampleOneInput.current)}
+                        mode="javascript"
+                        theme="monokai"
+                        name="editor"
+                        editorProps={{ $blockScrolling:true }}
+                        enableLiveAutocompletion={true}
+                        width='950'
+                        className="ace-editor"
+                        wrapEnabled={true}
+                        fontSize={13}
+
+                    />
+                    <Output/>
+
+                   </div>
+                    <Footer runCode={runCode} disableRun={setClickRun} runSubmit={runSubmit} passedTest={passedTest}/>
+                </div> 
             </>
         }
         </>
