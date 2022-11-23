@@ -252,7 +252,7 @@ const Editor = () => {
                         editorProps={{ $blockScrolling:true }}
                         enableLiveAutocompletion={true}
                         width={ open ? 500: 1200}
-                        height={600}
+                        height={500}
                         className="ace-editor"
                         wrapEnabled={true}
                         fontSize={13}
