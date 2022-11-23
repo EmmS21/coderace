@@ -4,17 +4,18 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import CheckIcon from '@mui/icons-material/Check';
+import Context from "../context/Context";
 
-const Footer = ({runCode, runSubmit, disableRun, passedTest}) => {
+
+const Footer = ({runCode, runSubmit }) => {
+  const { passedTest } = React.useContext(Context)
+  console.log('passedTest is now', passedTest.current)
     return (
         <Box sx={{ width: 800 }}>
         <BottomNavigation
           showLabels
         >
-          { disableRun && passedTest < 1?
-              <BottomNavigationAction onClick={runSubmit} label="Submit" icon={<CheckIcon/>} /> :
-            <BottomNavigationAction onClick={runCode} label="Run" icon={<PlayArrowIcon/>} /> 
-          }
+          <BottomNavigationAction onClick={ passedTest.current > 0 ? runSubmit : runCode } label= {  passedTest.current > 0 ? "Submit" : "Run"  } icon={ passedTest.current > 0 ? <CheckIcon/> : <PlayArrowIcon/> } /> :
         </BottomNavigation>
       </Box>
     );

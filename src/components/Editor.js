@@ -25,21 +25,19 @@ const Editor = () => {
     const baseURL = "https://judge0-ce.p.rapidapi.com/submissions";
     // const [resp, setResp] = useState("");
     const {
-        getQuestion, setReceived, title, 
-        problemStatement, getInput, extractExample, 
+        getQuestion, title, problemStatement,  
         loading, setLoading, exampleTwoOutput,
-        exampleOneInput, exampleOneOutput, exampleTwoInput 
+        exampleOneInput, exampleOneOutput, exampleTwoInput,
+        resp, expectedOutput, passedTest,
+        currentScore
     } = useContext(Context);
     const [color, setColor] = useState("#ffffff");
-    const [clickRun, setClickRun] = useState(false);
-    const expectedOutput = useRef([])
-    const resp = useRef([])
+    // const [clickRun, setClickRun] = useState(false);
     const [isComplete, setIsComplete] = useState(false)
     const [clickSubmit, setClickSubmit] = useState(false)
     const [isPass, setIsPass] = useState(true)
-    const passedTest = useRef(0)
     const [passTest, setPassTest] = useState(false)
-    const currentScore = useRef(0)
+    const [hasRun, setHasRun] = useState(false)
 
     let requestBody = {
         "source_code": "",
@@ -60,8 +58,8 @@ const Editor = () => {
     }
 
     const headers = {
-        "X-RapidAPI-Key": "b7d6b6780dmshe567233982bd7a4p1096c8jsn53ce4a3b5bec"
-        // 'X-RapidAPI-Key': 'bcc33499f9msh5f6c898ed17eea7p121b52jsn76ceee08eab4'
+        // "X-RapidAPI-Key": "b7d6b6780dmshe567233982bd7a4p1096c8jsn53ce4a3b5bec"
+        'X-RapidAPI-Key': 'bcc33499f9msh5f6c898ed17eea7p121b52jsn76ceee08eab4'
     }
 
     const awaitToken = async () => {
@@ -76,24 +74,35 @@ const Editor = () => {
         }
     },[isPass])
 
+
     function updateState(res){
         resp.current = res.data.stdout
-        console.log('!!!OUTPUT!!!', resp)
+        console.log('!!!OUTPUT!!!', resp.current)
         expectedOutput.current = res.data.status.description
         if(expectedOutput.current === 'Accepted') {
             setIsPass(true)
             passedTest.current += 1
+            console.log(`USER PASSED TEST, COUNTER: ${passedTest.current} IsPassState:${isPass} expected:${expectedOutput.current}`)
+            if(passTest.current === 2){
+                currentScore.current += 1
+                getEasyQuestion()
+                passedTest.current = 0
+            }
+
         } else{
             setIsPass(false)
+            passedTest.current = 0
+            console.log(`USER FAILED TEST, COUNTER: ${passedTest.current} IsPassState:${isPass} expected:${expectedOutput.current}`)
         }
-        console.log('!!!EXPECTED!!!', expectedOutput.current)
     }
     function handleError(res){
         resp.current = res.data.stderr
         setIsPass(false)
+        passedTest.current = 0
+        console.log(`ERROR RECEIVED, resp: ${resp.current} IsPassState:${isPass}`)
     }
-    async function sendCode(requestBody, one){
-        await axios.post(`${baseURL}`, requestBody, {
+    function sendCode(requestBody, one){
+        axios.post(`${baseURL}`, requestBody, {
             headers
             })
             .then((res)=> {
@@ -118,6 +127,7 @@ const Editor = () => {
         .then((res) =>{
             getQuestion.current = res.data.challenge
             title.current = getQuestion.current[0].Title;
+            console.log('question title', title.current)
             problemStatement.current = getQuestion?.current[0].Problem
             exampleOneInput.current = getQuestion.current[0]["Example One Input"]
             exampleOneOutput.current = getQuestion.current[0]["Example One Output"]
@@ -183,6 +193,7 @@ const Editor = () => {
         requestBody.source_code = document.getElementsByClassName('ace_content')[0].innerText.replace(/\\/g, '').replace(`const args = ${JSON.stringify(prevScope).replaceAll('\n','').replace(/\\/g, '')}`,`\nconst args = ${JSON.stringify(scope).replaceAll('\n','').replace(/\\/g, '')}`)
         requestBody.expected_output = exampleOutputs[one]
         resp.current = ''  
+        console.log('SENDING', requestBody.source_code)
         sendCode(requestBody)
     }
  
@@ -204,25 +215,19 @@ const Editor = () => {
         // }
     }
 
-    // function testFun(currCode){
-    //     console.log('TESTFUN', currCode)
-    //     console.log('TESTFUN TYPEOF', typeof(currCode))
-    //     // const newStr = currCode.replace('one', 'fifteen')
-    //     return `//comment\n function(test){\n return}`
-    // }
-
 
     function runCode(e){
         e.preventDefault();
         requestBody.source_code = document.getElementsByClassName('ace_content')[0].innerText
-        console.log('req', requestBody.source_code)
+        // console.log('req', requestBody.source_code)
         const output = exampleOneOutput.current === 'FALSE' || exampleOneOutput.current === 'TRUE'  ? exampleOneOutput.current.toLowerCase() : exampleOneOutput.current
         requestBody.expected_output = output
-        console.log('what are we sending', requestBody)
+        // console.log('what are we sending', requestBody)
         resp.current = ''
         passedTest.current = 0
+        expectedOutput.current = ''
+        console.log(`PASSED TEST COUNTER IS: ${passedTest.current} expected:${expectedOutput.current}`)
         sendCode(requestBody)
-        setClickRun(true)        
     }
     
     return (
@@ -252,15 +257,15 @@ const Editor = () => {
                         editorProps={{ $blockScrolling:true }}
                         enableLiveAutocompletion={true}
                         width='950'
+                        height={670}
                         className="ace-editor"
                         wrapEnabled={true}
                         fontSize={13}
 
                     />
-                    <Output/>
-
+                    <Output />
                    </div>
-                    <Footer runCode={runCode} disableRun={setClickRun} runSubmit={runSubmit} passedTest={passedTest}/>
+                    <Footer runCode={runCode} runSubmit={runSubmit} />
                 </div> 
             </>
         }

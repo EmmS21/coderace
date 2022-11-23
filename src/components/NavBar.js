@@ -18,7 +18,7 @@ const NavBar = ({ selectedLanguage }) => {
     const {
         getQuestion, extractExample, getInput, 
         received, title, problemStatement,
-        exampleOneInput, exampleOneOutput
+        exampleOneInput, exampleOneOutput, currentScore
     } = useContext(Context)
 
     const DrawerHeader = styled('div')(({ theme }) => ({
@@ -104,7 +104,7 @@ const NavBar = ({ selectedLanguage }) => {
                     </Grid>
                     <Grid item xs>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            Current Score: 
+                            Current Score: { currentScore.current }
                         </Typography>
                     </Grid>
                 </Grid>

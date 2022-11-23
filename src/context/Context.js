@@ -13,9 +13,12 @@ export const ContextProvider = ({ children }) => {
     const exampleOneOutput = useRef([]);
     const exampleTwoInput = useRef([]);
     const exampleTwoOutput = useRef([]);
-
+    const expectedOutput = useRef([])
     const [received, setReceived] = useState(false)
     const [loading, setLoading] = useState(true);
+    const resp = useRef([])
+    const passedTest = useRef(0)
+    const currentScore = useRef(0)
 
 
     function extractExample(challenge) {
@@ -50,6 +53,10 @@ export const ContextProvider = ({ children }) => {
         problemStatement: problemStatement,
         loading: loading,
         setLoading: setLoading,
+        resp: resp,
+        expectedOutput: expectedOutput,
+        passedTest:passedTest,
+        currentScore: currentScore
     }
 
     return(
