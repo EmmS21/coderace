@@ -11,7 +11,7 @@ const Footer = ({runCode, runSubmit }) => {
   const { passedTest } = React.useContext(Context)
   console.log('passedTest is now', passedTest.current)
     return (
-        <Box sx={{ width: 800 }}>
+        <Box sx={{ width: 500, height: '10%' }}>
         <BottomNavigation
           showLabels
         >

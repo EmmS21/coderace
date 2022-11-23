@@ -14,7 +14,7 @@ const Output = () => {
     //style outputs a little bit more probably
   return (
     <div className="output-wrapper">
-        <h4>  Output Terminal </h4>
+        <h4>Output Terminal</h4>
         <p> Output: <pre>  <code> { resp.current } </code> </pre> </p>
         
         {

@@ -1,14 +1,22 @@
 
 .editor-container{
-  width: 100%;
+  width: 95%;
 }
 
+.page-container{
+  width: 95%
+}
+
+.footer-container{
+  width: 50;
+  height: 10%
+}
 .editor{
   display: flex;
   justify-content: space-between;
 }
 .ace-editor{
-  width:80%;
+  width:70%;
 }
 
 .output-wrapper{

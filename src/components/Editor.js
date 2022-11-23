@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext, CSSProperties } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
@@ -11,8 +11,6 @@ import axios from "axios";
 import Context from "../context/Context";
 import RingLoader from "react-spinners/RingLoader";
 import Output from "./Output";
-import { fireEvent } from "@testing-library/react";
-import { NumbersRounded, NumbersSharp } from "@mui/icons-material";
 
 const override = {
     display: "block",
@@ -21,23 +19,18 @@ const override = {
 }
 
 const Editor = () => {
-    const output = null;
     const baseURL = "https://judge0-ce.p.rapidapi.com/submissions";
-    // const [resp, setResp] = useState("");
     const {
         getQuestion, title, problemStatement,  
         loading, setLoading, exampleTwoOutput,
         exampleOneInput, exampleOneOutput, exampleTwoInput,
         resp, expectedOutput, passedTest,
-        currentScore
+        currentScore, open
     } = useContext(Context);
-    const [color, setColor] = useState("#ffffff");
-    // const [clickRun, setClickRun] = useState(false);
     const [isComplete, setIsComplete] = useState(false)
     const [clickSubmit, setClickSubmit] = useState(false)
     const [isPass, setIsPass] = useState(true)
     const [passTest, setPassTest] = useState(false)
-    const [hasRun, setHasRun] = useState(false)
 
     let requestBody = {
         "source_code": "",
@@ -123,7 +116,7 @@ const Editor = () => {
     }
 
     function getEasyQuestion(){
-        axios.get("http://localhost:5000/retrieveQuestion")
+        axios.get("https://coderace.vercel.app/retrieveQuestion")
         .then((res) =>{
             getQuestion.current = res.data.challenge
             title.current = getQuestion.current[0].Title;
@@ -246,7 +239,9 @@ const Editor = () => {
             <WelcomeModal getEasyQuestion={getEasyQuestion} />
             </div> :
             <>
-                <NavBar />
+                <div className="page-container">
+                    <NavBar />
+                </div>
                 <div className="editor-container"> 
                     <div className="editor"> 
                     <AceEditor
@@ -256,8 +251,8 @@ const Editor = () => {
                         name="editor"
                         editorProps={{ $blockScrolling:true }}
                         enableLiveAutocompletion={true}
-                        width='950'
-                        height={670}
+                        width={ open ? 500: 1200}
+                        height={600}
                         className="ace-editor"
                         wrapEnabled={true}
                         fontSize={13}
@@ -265,7 +260,9 @@ const Editor = () => {
                     />
                     <Output />
                    </div>
-                    <Footer runCode={runCode} runSubmit={runSubmit} />
+                    <div className="footer-container">
+                        <Footer runCode={runCode} runSubmit={runSubmit} />
+                    </div>
                 </div> 
             </>
         }
