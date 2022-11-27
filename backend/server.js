@@ -13,7 +13,8 @@ app.get('/retrieveQuestion', (req, res) => {
         url: 'https://data.mongodb-api.com/app/data-pkrpq/endpoint/getRandom',
         withCredentials: false,
         headers: {
-            'api-key': process.env.apiKey
+            // 'api-key': process.env.apiKey
+            'api-key': '5opRhTzTbi2N2A71LeLZBAhrZEDxjUakTc1UOncQ2qGjg5CE1IvGTfLBMFFpVyL2'
         }
     }).then((resp) => {
         res.json({ challenge: resp.data })

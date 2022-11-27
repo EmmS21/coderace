@@ -20,6 +20,7 @@ const override = {
 
 const Editor = () => {
     const baseURL = "https://judge0-ce.p.rapidapi.com/submissions";
+    // const baseURL = "http://localhost:2358/submissions"
     const {
         getQuestion, title, problemStatement,  
         loading, setLoading, exampleTwoOutput,
@@ -35,29 +36,34 @@ const Editor = () => {
     let requestBody = {
         "source_code": "",
         "language_id": "63",
-        "number_of_runs": null,
+        "number_of_runs": "1",
         "stdin": "Judge0",
         "expected_output": null,
-        "cpu_time_limit": null,
-        "cpu_extra_time": null,
-        "wall_time_limit": null,
-        "memory_limit": null,
-        "stack_limit": null,
-        "max_processes_and_or_threads": null,
+        "cpu_time_limit": "5",
+        "cpu_extra_time": "1",
+        "wall_time_limit": "10",
+        "memory_limit": "128000",
+        "stack_limit": "64000",
+        "max_processes_and_or_threads": "60",
         "enable_per_process_and_thread_time_limit": null,
         "enable_per_process_and_thread_memory_limit": null,
-        "max_file_size": null,
+        "max_file_size": "1024",
         "enable_network": null
     }
 
     const headers = {
-        // "X-RapidAPI-Key": "b7d6b6780dmshe567233982bd7a4p1096c8jsn53ce4a3b5bec"
-        'X-RapidAPI-Key': 'bcc33499f9msh5f6c898ed17eea7p121b52jsn76ceee08eab4'
+        "X-RapidAPI-Key": "b7d6b6780dmshe567233982bd7a4p1096c8jsn53ce4a3b5bec"
+        // 'X-RapidAPI-Key': 'bcc33499f9msh5f6c898ed17eea7p121b52jsn76ceee08eab4'
     }
 
-    const awaitToken = async () => {
-        return await new Promise(resolve => resolve("result"));
+    // const awaitToken = async () => {
+    //     return await new Promise(resolve => resolve("result"));
+    // };
+
+    const awaitToken = () => {
+        return new Promise(resolve => setTimeout(() => resolve("result"),5000));
     };
+
 
     useEffect(() => {
         if(passedTest === 2){
@@ -95,9 +101,10 @@ const Editor = () => {
         console.log(`ERROR RECEIVED, resp: ${resp.current} IsPassState:${isPass}`)
     }
     function sendCode(requestBody, one){
+        console.log('requestBody', requestBody)
         axios.post(`${baseURL}`, requestBody, {
             headers
-            })
+        })
             .then((res)=> {
                 awaitToken().then(()=>{
                     axios.get(`${baseURL}/${res.data.token}`, {
@@ -163,7 +170,7 @@ const Editor = () => {
         for (let i = 0; i < varArr.length; i++) {
             scope[varArr[i]] = inputArr[i]
         }
-        return `//Do not delete. You will need to use the object keys to access their values as your function arguments\n//You may have to convert some object values to strings, integers or arrays.\n//Have a look at the example in the question and check the type of the expected output \n const args = ${JSON.stringify(scope).replaceAll('\n','').replace(/\\/g, '')}
+        return `//You will need to use the object keys to access their values as your function arguments\n//You may have to convert some object values to strings, integers or arrays.\n//Have a look at the example in the question and check the type of the expected output \n const args = ${JSON.stringify(scope).replaceAll('\n','').replace(/\\/g, '')}
         \nfunction test (){\n//enter your code here \n\n\n}
         \n//pass your arguments here \nconsole.log(test())`
     }
