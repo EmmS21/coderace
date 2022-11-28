@@ -11,6 +11,7 @@ import axios from "axios";
 import Context from "../context/Context";
 import RingLoader from "react-spinners/RingLoader";
 import Output from "./Output";
+import CompletedModal from "./CompletedModal";
 
 const override = {
     display: "block",
@@ -18,7 +19,7 @@ const override = {
     borderColor: "red",
 }
 
-const Editor = () => {
+export default function Editor () {
     const baseURL = "https://judge0-ce.p.rapidapi.com/submissions";
     // const baseURL = "http://localhost:2358/submissions"
     const {
@@ -75,7 +76,7 @@ const Editor = () => {
 
 
     function updateState(res){
-        resp.current = res.data.stdout
+        resp.current = atob(res.data.stdout)
         console.log('!!!OUTPUT!!!', resp.current)
         expectedOutput.current = res.data.status.description
         if(expectedOutput.current === 'Accepted') {
@@ -95,7 +96,9 @@ const Editor = () => {
         }
     }
     function handleError(res){
-        resp.current = res.data.stderr
+        resp.current = atob(res.data.stderr)
+        // console.log(Buffer.from(b64, 'base64').toString('hex'));
+
         setIsPass(false)
         passedTest.current = 0
         console.log(`ERROR RECEIVED, resp: ${resp.current} IsPassState:${isPass}`)
@@ -107,7 +110,7 @@ const Editor = () => {
         })
             .then((res)=> {
                 awaitToken().then(()=>{
-                    axios.get(`${baseURL}/${res.data.token}`, {
+                    axios.get(`${baseURL}/${res.data.token}?base64_encoded=true`, {
                         headers
                     })
                     .then((res)=> {
@@ -239,7 +242,7 @@ const Editor = () => {
                     color="blue"
                     loading={loading}
                     cssOverride={override}
-                    size={800}
+                    size={500}
                     aria-label="Loading Game"
                     data-testid="loader"
                 />
@@ -248,6 +251,7 @@ const Editor = () => {
             <>
                 <div className="page-container">
                     <NavBar />
+                    <CompletedModal />
                 </div>
                 <div className="editor-container"> 
                     <div className="editor"> 
@@ -276,5 +280,3 @@ const Editor = () => {
         </>
     )
 }
-
-export default Editor;

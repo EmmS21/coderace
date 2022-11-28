@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import Context from "../context/Context";
+
 
 const style = {
   position: 'absolute',
@@ -17,34 +18,25 @@ const style = {
 };
 
 
-export default function WelcomeModal({getEasyQuestion}) {
-  const [open, setOpen] = useState(true);
-  const handleClose = () => setOpen(false);
+export default function CompletedModal() {
+  const { currentScore, completedModal, setCompletedModal } = useContext(Context);
+  const handleClose = () => setCompletedModal(false);
   // setLoading
-  
-  function closeAndGetQuestion () {
-    handleClose()
-    getEasyQuestion()
-  }
-
   return (
     <div>
       <Modal
-        open={open}
+        open={completedModal}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-                Ready to play?
+                Times Up!
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Solve as many Leetcode questions as you can within 25 minutes.
+                Your Score is: {currentScore?.current}
             </Typography>
-            <center>
-              <Button onClick={closeAndGetQuestion}>Start</Button>
-            </center>
         </Box>
       </Modal>
     </div>

@@ -20,7 +20,7 @@ export const ContextProvider = ({ children }) => {
     const [received, setReceived] = useState(false)
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
-
+    const [completedModal, setCompletedModal] = useState(false);
 
     function extractExample(challenge) {
         const constraintsIdx = challenge.indexOf("Constraints")
@@ -59,7 +59,9 @@ export const ContextProvider = ({ children }) => {
         passedTest:passedTest,
         currentScore: currentScore,
         open: open,
-        setOpen: setOpen
+        setOpen: setOpen,
+        completedModal: completedModal,
+        setCompletedModal: setCompletedModal
     }
 
     return(

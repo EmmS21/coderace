@@ -13,12 +13,12 @@ import { styled } from "@mui/material/styles"
 import InputLabel from '@mui/material/InputLabel';
 import Context from "../context/Context"
 
-const NavBar = ({ selectedLanguage }) => {
-    const [open, setOpen] = useState(false);
+export default function NavBar ({ selectedLanguage }) {
     const {
         getQuestion, extractExample, getInput, 
         received, title, problemStatement,
-        exampleOneInput, exampleOneOutput, currentScore
+        exampleOneInput, exampleOneOutput, currentScore,
+        open, setOpen
     } = useContext(Context)
 
     const DrawerHeader = styled('div')(({ theme }) => ({
@@ -113,5 +113,3 @@ const NavBar = ({ selectedLanguage }) => {
         </Box>
     )
 }
-
-export default NavBar;

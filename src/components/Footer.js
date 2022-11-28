@@ -6,8 +6,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import CheckIcon from '@mui/icons-material/Check';
 import Context from "../context/Context";
 
-
-const Footer = ({runCode, runSubmit }) => {
+export default function Footer ({runCode, runSubmit }) {
   const { passedTest } = React.useContext(Context)
   console.log('passedTest is now', passedTest.current)
     return (
@@ -20,5 +19,3 @@ const Footer = ({runCode, runSubmit }) => {
       </Box>
     );
 }
-
-export default Footer;

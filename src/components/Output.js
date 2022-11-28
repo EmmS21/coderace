@@ -1,11 +1,9 @@
 import React, { useContext } from 'react'
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import DangerousIcon from '@mui/icons-material/Dangerous';
 import Context from "../context/Context";
 
 
-const Output = () => {
+export default function Output () {
     const testPassed = true;
     const { resp, expectedOutput } = useContext(Context);
 
@@ -31,4 +29,3 @@ const Output = () => {
   )
 }
 
-export default Output
