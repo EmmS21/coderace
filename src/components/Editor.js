@@ -76,7 +76,7 @@ export default function Editor () {
 
 
     function updateState(res){
-        resp.current = atob(res.data.stdout)
+        resp.current = res.data.stdout
         console.log('!!!OUTPUT!!!', resp.current)
         expectedOutput.current = res.data.status.description
         if(expectedOutput.current === 'Accepted') {
@@ -110,7 +110,7 @@ export default function Editor () {
         })
             .then((res)=> {
                 awaitToken().then(()=>{
-                    axios.get(`${baseURL}/${res.data.token}?base64_encoded=true`, {
+                    axios.get(`${baseURL}/${res.data.token}`, {
                         headers
                     })
                     .then((res)=> {
