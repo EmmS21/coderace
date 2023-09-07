@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,25 +9,22 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Clock from "./Clock";
 import Grid from "@mui/material/Grid";
 import Drawer  from "@mui/material/Drawer";
-import { styled } from "@mui/material/styles"
-import InputLabel from '@mui/material/InputLabel';
+// import { styled } from "@mui/material/styles"
 import Context from "../context/Context"
 
-export default function NavBar ({ selectedLanguage }) {
-    const {
-        getQuestion, extractExample, getInput, 
-        received, title, problemStatement,
+export default function NavBar () {
+    const { title, problemStatement,
         exampleOneInput, exampleOneOutput, currentScore,
         open, setOpen
     } = useContext(Context)
 
-    const DrawerHeader = styled('div')(({ theme }) => ({
-        display: 'flex',
-        alignItems: 'center',
-        padding: theme.spacing(0, 1),
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
-      }));
+    // const DrawerHeader = styled('div')(({ theme }) => ({
+    //     display: 'flex',
+    //     alignItems: 'center',
+    //     padding: theme.spacing(0, 1),
+    //     ...theme.mixins.toolbar,
+    //     justifyContent: 'flex-end',
+    //   }));
     
     const handleDrawerOpen = () => {
         setOpen(true);

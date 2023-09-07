@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -21,7 +21,6 @@ const style = {
 export default function CompletedModal() {
   const { currentScore, completedModal, setCompletedModal } = useContext(Context);
   const handleClose = () => setCompletedModal(false);
-  // setLoading
   return (
     <div>
       <Modal

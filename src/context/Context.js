@@ -1,5 +1,4 @@
 import React, { createContext, useState, useRef } from 'react';
-import axios from 'axios';
 
 const Context = createContext();
 

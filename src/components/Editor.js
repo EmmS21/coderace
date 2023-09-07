@@ -29,8 +29,6 @@ export default function Editor () {
         resp, expectedOutput, passedTest,
         currentScore, open
     } = useContext(Context);
-    const [isComplete, setIsComplete] = useState(false)
-    const [clickSubmit, setClickSubmit] = useState(false)
     const [isPass, setIsPass] = useState(true)
     const [passTest, setPassTest] = useState(false)
 
@@ -54,12 +52,7 @@ export default function Editor () {
 
     const headers = {
         "X-RapidAPI-Key": "b7d6b6780dmshe567233982bd7a4p1096c8jsn53ce4a3b5bec"
-        // 'X-RapidAPI-Key': 'bcc33499f9msh5f6c898ed17eea7p121b52jsn76ceee08eab4'
     }
-
-    // const awaitToken = async () => {
-    //     return await new Promise(resolve => resolve("result"));
-    // };
 
     const awaitToken = () => {
         return new Promise(resolve => setTimeout(() => resolve("result"),5000));
@@ -97,7 +90,6 @@ export default function Editor () {
     }
     function handleError(res){
         resp.current = atob(res.data.stderr)
-        // console.log(Buffer.from(b64, 'base64').toString('hex'));
 
         setIsPass(false)
         passedTest.current = 0
@@ -126,7 +118,8 @@ export default function Editor () {
     }
 
     function getEasyQuestion(){
-        axios.get("https://coderace.vercel.app/retrieveQuestion")
+        console.log('test')
+        axios.get("https://coderace.vercel.app/retrieveQuestion")//https://coderace.vercel.app/retrieveQuestion
         .then((res) =>{
             getQuestion.current = res.data.challenge
             title.current = getQuestion.current[0].Title;
@@ -202,30 +195,15 @@ export default function Editor () {
  
     function runSubmit(e){
         e.preventDefault();
-        setClickSubmit(true)
         evalRun(1)
-        // while(numRuns.current < 2 && isPass === true){
-        //     evalRun(numRuns)
-
-        // // }
-        // if(numRuns.current < 2){
-        //     evalRun(numRuns.current)
-        // }
-        // if(numRuns === 2 && isComplete === true){
-        //     numRuns.current = 0
-        //     return
-        //     // return getEasyQuestion()
-        // }
     }
 
 
     function runCode(e){
         e.preventDefault();
         requestBody.source_code = document.getElementsByClassName('ace_content')[0].innerText
-        // console.log('req', requestBody.source_code)
         const output = exampleOneOutput.current === 'FALSE' || exampleOneOutput.current === 'TRUE'  ? exampleOneOutput.current.toLowerCase() : exampleOneOutput.current
         requestBody.expected_output = output
-        // console.log('what are we sending', requestBody)
         resp.current = ''
         passedTest.current = 0
         expectedOutput.current = ''

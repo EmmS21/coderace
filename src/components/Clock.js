@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
 import Countdown from "react-countdown";
 import Context from "../context/Context";
-// 1500000
-// 10000
-export default function Clock ({setIsComplete}) {
+export default function Clock () {
     const { setCompletedModal } = useContext(Context);
     return (
         <Countdown 
